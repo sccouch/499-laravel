@@ -19,3 +19,7 @@ Route::get('/', function()
 Route::get('/songs/search', 'SongController@search');
 
 Route::get('/songs', 'SongController@listSongs');
+
+Route::get('/dvds/search', 'DvdController@search');
+
+Route::get('/dvds', 'DvdController@listDvds');
