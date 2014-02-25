@@ -6,8 +6,10 @@
  * Time: 11:12 AM
  */
 
-class Dvd {
+class Dvd extends Eloquent {
 
+    /*
+    * Assignment 3
     public static function search($title, $genre, $rating)
     {
         /*
@@ -16,8 +18,9 @@ class Dvd {
         * ON dvds.genre_id = genres.id
         * INNER JOIN ratings
         * ON dvds.rating_id = ratings.id
-        */
-        $query = DB::table('dvds')
+
+
+         $query = DB::table('dvds')
             ->select('title', 'genre_name', 'rating_name', 'label_name', 'sound_name', 'format_name', DB::raw("DATE_FORMAT(release_date, '%b %d %Y %h:%i %p') AS added"))
             ->join('genres', 'dvds.genre_id', '=', 'genres.id')
             ->join('ratings', 'dvds.rating_id', '=', 'ratings.id')
@@ -46,5 +49,32 @@ class Dvd {
 
 
         return $dvds;
-    }
+    */
+
+        public function rating()
+        {
+            return $this->belongsTo("Rating");
+        }
+
+        public function genre()
+        {
+            return $this->belongsTo("Genre");
+        }
+
+        public function label()
+        {
+            return $this->belongsTo("Label");
+        }
+
+        public function sound()
+        {
+            return $this->belongsTo("Sound");
+        }
+
+        public function format()
+        {
+            return $this->belongsTo("Format");
+        }
+
+    //}
 }
