@@ -11,15 +11,27 @@
 |
 */
 
-//Route::get('songs/create', function()
-//{
-//    $genres = Genre::all();
-//    $artists = Artist::all();
-//	return View::make('songs/create', [
-//        'artists' => $artists,
-//        'genres' => $genres
-//    ]);
-//});
+Route::get('itunes', function()
+{
+    $itunes = new \itp\api\ItunesSearch();
+    $json = $itunes->getResults();
+
+    //dd($json);
+
+    return View::make('itunes', [
+        'songs' => $json->results
+    ]);
+});
+
+Route::get('songs/create', function()
+{
+    $genres = Genre::all();
+    $artists = Artist::all();
+	return View::make('songs/create', [
+        'artists' => $artists,
+        'genres' => $genres
+    ]);
+});
 
 Route::get('/songs/search', 'SongController@search');
 
@@ -29,23 +41,50 @@ Route::get('/songs', 'SongController@listSongs');
 //Assignment 4
 Route::get('/dvds/search', 'DvdController@search');
 Route::get('/dvds', 'DvdController@listDvds');
-Route::get('/dvds/create', 'DvdController@createDvd');
 Route::post('/dvds', 'DvdController@saveDvd');
+Route::get('/dvds/create', 'DvdController@createDvd');
 
-//Route::post('songs', function()
-//{
-//    $song = new Song();
-//    $song->title = Input::get('title');
-//    $song->artist_id = Input::get('artist');
-//    $song->genre_id = Input::get('genre');
-//    $song->price = Input::get('price');
-//    $song->save();
-//
-//    return Redirect::to('songs/create')->with('success', 'Yay!');
-//
-//
-//});
-//
+Route::get('/rt/results', function() {
+    $title = Input::get('title');
+    $RTSearch = new \itp\api\RTSearch();
+    $json = $RTSearch->getResults($title);
+    //dd($json);
+    return View::make('rt/results', [
+        'movies' => $json->movies
+    ]);
+
+
+});
+
+Route::get('rt/search', function() {
+    return View::make('rt/search');
+});
+
+Route::post('songs', function()
+{
+    $validation = Song::validate(Input::all());
+
+    if($validation->passes()) {
+        $song = new Song();
+        $song->title = Input::get('title');
+        $song->artist_id = Input::get('artist');
+        $song->genre_id = Input::get('genre');
+        $song->price = Input::get('price');
+        $song->save();
+
+        return Redirect::to('songs/create')->with('success', 'Yay!');
+    }
+
+    return Redirect::to('songs/create')
+        ->withInput()
+        ->with('errors', $validation->messages());
+
+
+
+
+
+});
+
 //Route::get('songs', function()
 //{
 //    $songs = Song::take(5)->get();
