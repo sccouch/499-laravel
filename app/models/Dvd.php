@@ -8,6 +8,17 @@
 
 class Dvd extends Eloquent {
 
+    public static function validate($input) {
+        return Validator::make($input, [
+            "title" => "required|min:4",
+            "rating" => "required|integer",
+            "genre" => "required|integer",
+            "label" => "required|integer",
+            "sound" => "required|integer",
+            "format" => "required|integer",
+        ]);
+    }
+
     /*
     * Assignment 3
     public static function search($title, $genre, $rating)
